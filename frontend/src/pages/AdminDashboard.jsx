@@ -30,6 +30,10 @@ export default function AdminDashboard() {
   // Location edit state
   const [editingLocation, setEditingLocation] = useState(null);
 
+  // Action loading state
+  const [actionLoading, setActionLoading] = useState(false);
+  const [loadingMsg, setLoadingMsg] = useState('');
+
   const notify = (text, isError = false) => {
     setMsg(text);
     setMsgError(isError);
@@ -83,6 +87,8 @@ export default function AdminDashboard() {
   // ── Programs ──────────────────────────────────────────────────────────────
   const handleSaveProgram = async (e) => {
     e.preventDefault();
+    setActionLoading(true);
+    setLoadingMsg('Saving program changes...');
     try {
       await updateProgram(editingProgram.id, {
         name: editingProgram.name,
@@ -96,52 +102,72 @@ export default function AdminDashboard() {
         location: editingProgram.location,
         career_outcomes: editingProgram.career_outcomes,
       });
-      notify('Program saved successfully.');
       setEditingProgram(null);
-      load();
+      await load();
+      notify('Program saved successfully.');
     } catch (err) {
       notify('Failed to save program: ' + (err.response?.data?.detail || err.message), true);
+    } finally {
+      setActionLoading(false);
+      setLoadingMsg('');
     }
   };
 
   const handleDeleteProgram = async (id) => {
     if (!window.confirm('Delete this program?')) return;
+    setActionLoading(true);
+    setLoadingMsg('Deleting program...');
     try {
       await deleteProgram(id);
-      notify('Program deleted.');
-      load();
+      await load();
+      notify('Program deleted successfully.');
     } catch (err) {
       notify('Failed to delete program: ' + (err.response?.data?.detail || err.message), true);
+    } finally {
+      setActionLoading(false);
+      setLoadingMsg('');
     }
   };
 
   const handleImageUpload = async (programId, file) => {
     const fd = new FormData();
     fd.append('image', file);
+    setActionLoading(true);
+    setLoadingMsg('Uploading program image...');
     try {
       await uploadProgramImage(programId, fd);
-      notify('Image uploaded.');
-      load();
+      await load();
+      notify('Program image uploaded.');
     } catch (err) {
       notify('Image upload failed: ' + (err.response?.data?.detail || err.message), true);
+    } finally {
+      setActionLoading(false);
+      setLoadingMsg('');
     }
   };
 
   // ── Locations ─────────────────────────────────────────────────────────────
   const handleAddLocation = async (e) => {
     e.preventDefault();
+    setActionLoading(true);
+    setLoadingMsg('Adding new location...');
     try {
       await createLocation(newLoc);
       setNewLoc({ name: '', latitude: '', longitude: '', type: 'landmark', description: '' });
-      notify('Location added.');
-      load();
+      await load();
+      notify('Location added successfully.');
     } catch (err) {
       notify('Failed to add location: ' + (err.response?.data?.detail || err.message), true);
+    } finally {
+      setActionLoading(false);
+      setLoadingMsg('');
     }
   };
 
   const handleSaveLocation = async (e) => {
     e.preventDefault();
+    setActionLoading(true);
+    setLoadingMsg('Saving location changes...');
     try {
       await updateLocation(editingLocation.id, {
         name: editingLocation.name,
@@ -150,34 +176,47 @@ export default function AdminDashboard() {
         type: editingLocation.type,
         description: editingLocation.description,
       });
-      notify('Location saved successfully.');
       setEditingLocation(null);
-      load();
+      await load();
+      notify('Location saved successfully.');
     } catch (err) {
       notify('Failed to save location: ' + (err.response?.data?.detail || err.message), true);
+    } finally {
+      setActionLoading(false);
+      setLoadingMsg('');
     }
   };
 
   const handleDeleteLocation = async (id) => {
     if (!window.confirm('Delete this location?')) return;
+    setActionLoading(true);
+    setLoadingMsg('Deleting location...');
     try {
       await deleteLocation(id);
-      notify('Location deleted.');
-      load();
+      await load();
+      notify('Location deleted successfully.');
     } catch (err) {
       notify('Failed to delete location: ' + (err.response?.data?.detail || err.message), true);
+    } finally {
+      setActionLoading(false);
+      setLoadingMsg('');
     }
   };
 
   const handleLocationImageUpload = async (locationId, file) => {
     const fd = new FormData();
     fd.append('image', file);
+    setActionLoading(true);
+    setLoadingMsg('Uploading location photo...');
     try {
       await uploadLocationImage(locationId, fd);
+      await load();
       notify('Location photo uploaded successfully!');
-      load();
     } catch (err) {
       notify('Location photo upload failed: ' + (err.response?.data?.detail || err.message), true);
+    } finally {
+      setActionLoading(false);
+      setLoadingMsg('');
     }
   };
 
@@ -228,6 +267,13 @@ export default function AdminDashboard() {
 
   return (
     <div className="admin-dash-page">
+      {actionLoading && (
+        <div className="dash-loading-overlay" role="status" aria-live="polite">
+          <div className="dash-loading-spinner" />
+          <span>{loadingMsg || 'Processing changes...'}</span>
+        </div>
+      )}
+
       {/* Top Navigation */}
       <header className="admin-dash-top">
         <div className="admin-dash-brand">
@@ -450,6 +496,7 @@ export default function AdminDashboard() {
                   <option value="landmark">Landmark</option>
                   <option value="college">College</option>
                   <option value="gate">Gate</option>
+                  <option value="others">Others</option>
                 </select>
               </div>
             </div>
@@ -488,6 +535,7 @@ export default function AdminDashboard() {
                           <option value="landmark">Landmark</option>
                           <option value="college">College</option>
                           <option value="gate">Gate</option>
+                          <option value="others">Others</option>
                         </select>
                       </div>
                       <div className="form-group">

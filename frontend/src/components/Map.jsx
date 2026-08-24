@@ -309,7 +309,20 @@ const Map = forwardRef(({ locations }, ref) => {
     showRouteFromSelectedStart(lat, lng, label);
   };
 
+  const [isTourRunning, setIsTourRunning] = useState(false);
+  const tourActiveRef = useRef(false);
+
+  const stopGuidedTour = () => {
+    tourActiveRef.current = false;
+    setIsTourRunning(false);
+    updateStatus("Campus tour stopped.");
+  };
+
   const clearAllRoute = () => {
+    if (tourActiveRef.current) {
+      tourActiveRef.current = false;
+      setIsTourRunning(false);
+    }
     if (selectedPinpointRef.current) {
       selectedPinpointRef.current.remove();
       selectedPinpointRef.current = null;
@@ -335,6 +348,11 @@ const Map = forwardRef(({ locations }, ref) => {
 
   // Feature #4: Guided Freshman Tour
   const runGuidedTour = async () => {
+    if (tourActiveRef.current) {
+      stopGuidedTour();
+      return;
+    }
+
     if (!locations || locations.length === 0) return;
     const tourKeyNames = ['Gate', 'College of CCSICT', 'Library', 'Food Court', 'College of Agriculture'];
     const tourLocs = tourKeyNames
@@ -343,8 +361,13 @@ const Map = forwardRef(({ locations }, ref) => {
 
     if (tourLocs.length === 0) return;
 
+    tourActiveRef.current = true;
+    setIsTourRunning(true);
     updateStatus("Starting guided campus tour...");
+
     for (let i = 0; i < tourLocs.length; i++) {
+      if (!tourActiveRef.current) break;
+
       const loc = tourLocs[i];
       setSelectedLocationDrawer(loc);
       showRouteFromSelectedStart(parseFloat(loc.latitude), parseFloat(loc.longitude), loc.name);
@@ -356,9 +379,19 @@ const Map = forwardRef(({ locations }, ref) => {
           speed: 0.8
         });
       }
-      await new Promise(r => setTimeout(r, 4500));
+
+      // 4.5 seconds delay with 300ms cancellation polling
+      for (let step = 0; step < 15; step++) {
+        if (!tourActiveRef.current) break;
+        await new Promise(r => setTimeout(r, 300));
+      }
     }
-    updateStatus("Guided campus tour completed.");
+
+    if (tourActiveRef.current) {
+      updateStatus("Guided campus tour completed.");
+    }
+    tourActiveRef.current = false;
+    setIsTourRunning(false);
   };
 
   useImperativeHandle(ref, () => ({
@@ -448,8 +481,8 @@ const Map = forwardRef(({ locations }, ref) => {
             </button>
 
             {/* Feature #4: Guided Tour */}
-            <button type="button" className="btn-pill-green" onClick={runGuidedTour}>
-              🚩 Campus Tour
+            <button type="button" className={isTourRunning ? 'btn-pill-red' : 'btn-pill-green'} onClick={runGuidedTour}>
+              {isTourRunning ? '⏹️ Stop Tour' : '🚩 Campus Tour'}
             </button>
           </div>
 
