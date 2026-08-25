@@ -77,8 +77,8 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -437,7 +437,7 @@ a {
   background: #fbfbf8;
   border: 1px solid #eaecf0;
   border-radius: 18px;
-  padding: 12px 20px;
+  padding: 14px 20px;
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
@@ -451,6 +451,7 @@ a {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  flex: 1 1 auto;
 }
 
 .route-label {
@@ -521,15 +522,26 @@ a {
 }
 
 .map-tools-right {
-  max-width: 380px;
+  flex: 1 1 300px;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .route-status-msg {
   margin: 0;
-  font-size: 0.82rem;
-  color: #475467;
-  line-height: 1.4;
-  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #344054;
+  line-height: 1.45;
+  text-align: left;
+  word-break: break-word;
+  background: #f2f4f7;
+  border-radius: 10px;
+  padding: 8px 14px;
+  border: 1px solid #e4e7ec;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .campus-map {

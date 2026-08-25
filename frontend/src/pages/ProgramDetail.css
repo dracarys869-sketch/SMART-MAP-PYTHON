@@ -24,8 +24,8 @@
   background: var(--pd-white);
   border: 1px solid var(--pd-border);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .pd-page-root .brand {
