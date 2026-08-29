@@ -66,8 +66,8 @@ export default function ProgramDetail() {
   /* ── Derived Data ── */
   const locationName = program.location_details?.name || 'Campus Building';
   const routeUrl     = `/?routeTo=${encodeURIComponent(locationName)}`;
-  const campusImageUrl = program.location_details?.image_url || '/images/secondary.jpg';
-  const collegeLogoUrl = program.image_url || '/images/isulogo.png';
+  const campusImageUrl = program.location_details?.image_url || 'http://127.0.0.1:8000/media/images-programs/secondary.jpg';
+  const collegeLogoUrl = program.image_url || 'http://127.0.0.1:8000/media/images-programs/isulogo.png';
 
   const careerOutcomesList = (program.career_outcomes && program.career_outcomes.length > 0)
     ? program.career_outcomes
@@ -139,7 +139,7 @@ export default function ProgramDetail() {
                     className="pd-campus-img"
                     src={campusImageUrl}
                     alt={`${program.name} campus building`}
-                    onError={(e) => { e.target.src = '/images/secondary.jpg'; }}
+                    onError={(e) => { e.target.src = 'http://127.0.0.1:8000/media/images-programs/secondary.jpg'; }}
                   />
 
                   {/* College Logo — top-left corner overlay */}
@@ -147,7 +147,7 @@ export default function ProgramDetail() {
                     <img
                       src={collegeLogoUrl}
                       alt={`${program.college} logo`}
-                      onError={(e) => { e.target.src = '/images/isulogo.png'; }}
+                      onError={(e) => { e.target.src = 'http://127.0.0.1:8000/media/images-programs/isulogo.png'; }}
                     />
                   </div>
 

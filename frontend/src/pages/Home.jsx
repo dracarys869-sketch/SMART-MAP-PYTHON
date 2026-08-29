@@ -63,22 +63,23 @@ export default function Home() {
 
   return (
     <>
-      {/* ── Hero Section (nav + decorative circles + headline) ── */}
+      {/* ── Hero Section (nav + two-column layout) ── */}
       <section className="site-hero" id="top">
-        {/* Decorative background circles */}
-        <div className="hero-deco hero-deco--left" aria-hidden="true" />
-        <div className="hero-deco hero-deco--right" aria-hidden="true" />
-
         <Navbar />
 
         <div className="hero-body">
-          <span className="hero-badge">Campus Discovery Platform</span>
-          <h1>ISU Cauayan Interactive Map</h1>
-          <p>
-            Explore academic programs, locate key campus buildings,
-            and plan your path in one place.
-          </p>
-          <a href="#programList" className="btn-gold">Explore Programs</a>
+          <div className="hero-image">
+            <img src="http://127.0.0.1:8000/media/images-programs/isufront.png" alt="ISU Cauayan Campus" />
+          </div>
+          <div className="hero-content">
+            <span className="hero-badge">📍 CAMPUS DISCOVERY PLATFORM</span>
+            <h1>Isabela State University<br /><span className="hero-highlight">Interactive Map</span></h1>
+            <p>
+              Explore academic programs, locate key campus buildings,
+              and plan your path in one place.
+            </p>
+            <a href="#programList" className="btn-gold">🎯 Explore Programs</a>
+          </div>
         </div>
       </section>
 

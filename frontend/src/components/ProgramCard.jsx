@@ -8,9 +8,9 @@ export default function ProgramCard({ program, onLocate }) {
       <Link to={`/programs/${program.slug}`} className="program-logo-link" aria-label={`View details for ${program.name}`}>
         <img
           className="program-logo"
-          src={program.image_url || '/images/ict.png'}
+          src={program.image_url || 'http://127.0.0.1:8000/media/images-programs/ict.png'}
           alt={program.name}
-          onError={(e) => { e.target.src = '/images/ict.png'; }}
+          onError={(e) => { e.target.src = 'http://127.0.0.1:8000/media/images-programs/ict.png'; }}
         />
       </Link>
 

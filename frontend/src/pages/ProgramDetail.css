@@ -21,18 +21,79 @@
 
 /* ── Scoped Navbar Override (white bg on this page only) ── */
 .pd-page-root .top-nav {
-  background: var(--pd-white);
-  border: 1px solid var(--pd-border);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+  background: #ffffff;
+  border-bottom: 1px solid #eaecf0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .pd-page-root .brand {
-  color: var(--pd-text);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #1d2939;
+}
+
+.pd-page-root .brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pd-page-root .brand-main {
+  color: #1d2939;
+  font-size: 1.2rem;
+}
+
+.pd-page-root .brand-sub {
+  color: #667085;
+  font-size: 0.75rem;
+}
+
+.pd-page-root .brand img {
+  width: 48px;
+  height: 48px;
+}
+
+.pd-page-root .nav-links {
+  display: flex;
+  gap: 32px;
 }
 
 .pd-page-root .nav-links a {
+  color: #1d2939;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  padding: 8px 0;
+  transition: color 0.25s ease, border-bottom 0.25s ease;
+}
+
+.pd-page-root .nav-links a:hover {
+  color: #e2a028;
+  border-bottom: 3px solid #e2a028;
+}
+
+.pd-page-root .nav-links a.nav-active {
+  color: #e2a028;
+  border-bottom: 3px solid #e2a028;
+}
+
+.pd-page-root .nav-links li:last-child a {
+  border: 1px solid #1d2939;
+  border-radius: 20px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #1d2939;
+}
+
+.pd-page-root .nav-links li:last-child a:hover {
+  border: 1px solid #e2a028;
+  border-bottom: 1px solid #e2a028;
+  color: #e2a028;
+}
   color: var(--pd-muted);
 }
 

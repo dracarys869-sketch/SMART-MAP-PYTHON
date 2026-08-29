@@ -277,8 +277,11 @@ export default function AdminDashboard() {
       {/* Top Navigation */}
       <header className="admin-dash-top">
         <div className="admin-dash-brand">
-          <img src="/images/isulogo.png" alt="ISU Cauayan logo" />
-          <span>ISU Cauayan Admin</span>
+          <img src="http://127.0.0.1:8000/media/images-programs/isulogo.png" alt="Isabela State University logo" />
+          <div className="admin-brand-text">
+            <div className="admin-brand-main">ISABELA STATE UNIVERSITY</div>
+            <div className="admin-brand-sub">Cauayan campus Admin</div>
+          </div>
         </div>
         <div className="admin-dash-nav-actions">
           <a href="/" className="btn-dash-link">View Campus Map</a>

@@ -9,8 +9,11 @@ export default function Navbar() {
   return (
     <nav className="top-nav">
       <div className="brand">
-        <img src="/images/isulogo.png" alt="ISU Cauayan logo" />
-        <span>ISU Cauayan</span>
+        <img src="http://127.0.0.1:8000/media/images-programs/isulogo.png" alt="Isabela State University logo" />
+        <div className="brand-text">
+          <div className="brand-main">ISABELA STATE UNIVERSITY</div>
+          <div className="brand-sub">Cauayan campus</div>
+        </div>
       </div>
 
       <button
@@ -30,15 +33,15 @@ export default function Navbar() {
       <ul className={`nav-links${isOpen ? ' open' : ''}`} id="siteNavLinks">
         <li>
           <NavLink to="/" end className={({ isActive }) => isActive ? 'nav-active' : ''} onClick={close}>
-            Home
+            HOME
           </NavLink>
         </li>
-        <li><a href="/#programList" onClick={close}>Programs</a></li>
-        <li><a href="/#map-section" onClick={close}>Map</a></li>
-        <li><a href="/#about" onClick={close}>About</a></li>
+        <li><a href="/#programList" onClick={close}>PROGRAMS</a></li>
+        <li><a href="/#map-section" onClick={close}>MAPS</a></li>
+        <li><a href="/#about" onClick={close}>ABOUT</a></li>
         <li>
           <NavLink to="/admin-dashboard" className={({ isActive }) => isActive ? 'nav-active' : ''} onClick={close}>
-            Admin
+            ADMIN
           </NavLink>
         </li>
       </ul>

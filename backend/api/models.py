@@ -39,7 +39,7 @@ class Program(models.Model):
     learning_format = models.CharField(max_length=255, blank=True)
     duration = models.CharField(max_length=100, default="4 Years")
     program_type = models.CharField(max_length=100, default="On-campus")
-    image = models.ImageField(upload_to="programs/", blank=True, null=True)
+    image = models.ImageField(upload_to="images-programs/", blank=True, null=True)
     career_outcomes = models.JSONField(default=list, blank=True)
     slug = models.SlugField(max_length=255, unique=True)
 
