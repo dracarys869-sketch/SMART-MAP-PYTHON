@@ -35,23 +35,20 @@ const Map = forwardRef(({ locations }, ref) => {
       style: {
         version: 8,
         sources: {
-          'carto-voyager': {
+          'osm-tiles': {
             type: 'raster',
             tiles: [
-              'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
-              'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
-              'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
-              'https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png'
+              'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
             ],
             tileSize: 256,
-            attribution: '© <a href="https://carto.com/">CARTO</a>, © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           }
         },
         layers: [
           {
-            id: 'carto-voyager-layer',
+            id: 'osm-tiles-layer',
             type: 'raster',
-            source: 'carto-voyager',
+            source: 'osm-tiles',
             minzoom: 0,
             maxzoom: 19
           }

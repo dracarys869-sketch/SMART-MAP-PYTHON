@@ -21,10 +21,11 @@ class Command(BaseCommand):
         for name, lat, lng, kind in LOCATIONS:
             location, _ = Location.objects.update_or_create(name=name, defaults={"latitude":lat,"longitude":lng,"type":kind})
             location_by_name[name] = location
-        image_root = settings.BASE_DIR.parent
-        for slug, name, college, location_name, image_path, subtitle, outcomes in PROGRAMS:
+        image_root = settings.BASE_DIR / "media" / "images-programs"
+        for slug, name, college, location_name, image_filename, subtitle, outcomes in PROGRAMS:
             program, created = Program.objects.update_or_create(slug=slug, defaults={"name":name,"college":college,"location":location_by_name[location_name],"subtitle":subtitle,"description":subtitle,"learning_format":"On-campus","duration":"4 Years","program_type":"On-campus","career_outcomes":outcomes})
-            source = image_root / image_path
-            if (created or not program.image) and source.exists():
-                with open(source, "rb") as image_file: program.image.save(os.path.basename(image_path), File(image_file), save=True)
-        self.stdout.write(self.style.SUCCESS("Seeded 13 locations and 7 programs without duplicates."))
+            source = image_root / os.path.basename(image_filename)
+            if source.exists():
+                with open(source, "rb") as image_file:
+                    program.image.save(os.path.basename(image_filename), File(image_file), save=True)
+        self.stdout.write(self.style.SUCCESS("Seeded 13 locations and 7 programs successfully."))

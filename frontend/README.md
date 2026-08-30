@@ -3,7 +3,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 .\venv\Scripts\Activate.ps1
 cd backend
 python manage.py migrate
-python manage.py seed
+python manage.py seed_data
 python manage.py runserver 8000
 
 
