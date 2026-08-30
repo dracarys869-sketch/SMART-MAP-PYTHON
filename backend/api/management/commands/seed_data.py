@@ -17,6 +17,8 @@ PROGRAMS = [
 class Command(BaseCommand):
     help = "Seed the original ISU Cauayan locations and program profiles safely."
     def handle(self, *args, **kwargs):
+        # Clean up any legacy duplicate program entries
+        Program.objects.filter(slug__contains="-in-").delete()
         location_by_name = {}
         for name, lat, lng, kind in LOCATIONS:
             location, _ = Location.objects.update_or_create(name=name, defaults={"latitude":lat,"longitude":lng,"type":kind})
