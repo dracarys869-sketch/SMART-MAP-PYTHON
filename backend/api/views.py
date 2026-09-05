@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from PIL import Image, UnidentifiedImageError
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -10,6 +11,25 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Location, Program
 from .permissions import IsRoleAdminOrReadOnly
 from .serializers import LocationSerializer, ProgramSerializer
+
+MAX_IMAGE_SIZE = 5 * 1024 * 1024
+ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG", "WEBP", "GIF"}
+
+def validate_image_upload(upload):
+    if upload.size > MAX_IMAGE_SIZE:
+        return "Image files must be 5 MB or smaller."
+    if (upload.content_type or "") not in {"image/jpeg", "image/png", "image/webp", "image/gif"}:
+        return "Only JPEG, PNG, WEBP, and GIF images are allowed."
+    try:
+        image = Image.open(upload)
+        image.verify()
+        if image.format not in ALLOWED_IMAGE_FORMATS:
+            return "Only JPEG, PNG, WEBP, and GIF images are allowed."
+    except (UnidentifiedImageError, OSError):
+        return "Upload a valid image file."
+    finally:
+        upload.seek(0)
+    return None
 
 def user_payload(user):
     profile = getattr(user, "profile", None)
@@ -31,7 +51,8 @@ class LocationViewSet(viewsets.ModelViewSet):
     def image(self, request, pk=None):
         upload = request.FILES.get("image")
         if not upload: return Response({"image": ["An image file is required."]}, status=status.HTTP_400_BAD_REQUEST)
-        if not (upload.content_type or "").startswith("image/"): return Response({"image": ["Upload a valid image file."]}, status=status.HTTP_400_BAD_REQUEST)
+        image_error = validate_image_upload(upload)
+        if image_error: return Response({"image": [image_error]}, status=status.HTTP_400_BAD_REQUEST)
         location = self.get_object(); location.image = upload; location.save(update_fields=["image"])
         return Response(LocationSerializer(location, context={"request": request}).data)
 
@@ -53,7 +74,8 @@ class ProgramViewSet(viewsets.ModelViewSet):
     def image(self, request, pk=None):
         upload = request.FILES.get("image")
         if not upload: return Response({"image": ["An image file is required."]}, status=status.HTTP_400_BAD_REQUEST)
-        if not (upload.content_type or "").startswith("image/"): return Response({"image": ["Upload a valid image file."]}, status=status.HTTP_400_BAD_REQUEST)
+        image_error = validate_image_upload(upload)
+        if image_error: return Response({"image": [image_error]}, status=status.HTTP_400_BAD_REQUEST)
         program = self.get_object(); program.image = upload; program.save(update_fields=["image"])
         return Response(ProgramSerializer(program, context={"request": request}).data)
 

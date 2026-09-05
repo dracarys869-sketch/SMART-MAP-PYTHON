@@ -94,8 +94,6 @@
   border-bottom: 1px solid #e2a028;
   color: #e2a028;
 }
-  color: var(--pd-muted);
-}
 
 .pd-page-root .nav-links a:hover {
   color: var(--pd-green);

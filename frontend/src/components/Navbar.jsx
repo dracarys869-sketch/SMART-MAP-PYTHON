@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { mediaUrl } from '../services/api';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +10,7 @@ export default function Navbar() {
   return (
     <nav className="top-nav">
       <div className="brand">
-        <img src="http://127.0.0.1:8000/media/images-programs/isulogo.png" alt="Isabela State University logo" />
+        <img src={mediaUrl('media/images-programs/isulogo.png')} alt="Isabela State University logo" />
         <div className="brand-text">
           <div className="brand-main">ISABELA STATE UNIVERSITY</div>
           <div className="brand-sub">Cauayan campus</div>

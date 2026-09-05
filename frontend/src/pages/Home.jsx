@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getPrograms, getLocations } from '../services/api';
+import { getPrograms, getLocations, mediaUrl } from '../services/api';
 import Navbar from '../components/Navbar';
 import ProgramCard from '../components/ProgramCard';
 import Map from '../components/Map';
@@ -69,16 +69,16 @@ export default function Home() {
 
         <div className="hero-body">
           <div className="hero-image">
-            <img src="http://127.0.0.1:8000/media/images-programs/isufront.png" alt="ISU Cauayan Campus" />
+            <img src={mediaUrl('media/images-programs/isufront.png')} alt="ISU Cauayan Campus" />
           </div>
           <div className="hero-content">
-            <span className="hero-badge">📍 CAMPUS DISCOVERY PLATFORM</span>
+             <span className="hero-badge">CAMPUS DISCOVERY PLATFORM</span>
             <h1>Isabela State University<br /><span className="hero-highlight">Interactive Map</span></h1>
             <p>
               Explore academic programs, locate key campus buildings,
               and plan your path in one place.
             </p>
-            <a href="#programList" className="btn-gold">🎯 Explore Programs</a>
+             <a href="#programList" className="btn-gold">Explore Programs</a>
           </div>
         </div>
       </section>
@@ -90,14 +90,14 @@ export default function Home() {
         {/* Category Pills (Feature #2) */}
         <div className="category-pills" aria-label="Quick category filters">
           {[
-            { label: 'All Programs', icon: '🎓', value: 'all' },
-            { label: 'CCSICT', icon: '💻', value: 'College of CCSICT' },
-            { label: 'Agriculture', icon: '🌾', value: 'College of Agriculture' },
-            { label: 'Law', icon: '⚖️', value: 'College of Law' },
-            { label: 'Business', icon: '📊', value: 'College of Business and Management' },
-            { label: 'Education', icon: '📚', value: 'College of Education' },
-            { label: 'Criminology', icon: '🛡️', value: 'College of Criminal and Justice Education' },
-            { label: 'Polytechnic', icon: '⚙️', value: 'College of Polytechnic' },
+            { label: 'All Programs', value: 'all' },
+            { label: 'CCSICT', value: 'College of CCSICT' },
+            { label: 'Agriculture', value: 'College of Agriculture' },
+            { label: 'Law', value: 'College of Law' },
+            { label: 'Business', value: 'College of Business and Management' },
+            { label: 'Education', value: 'College of Education' },
+            { label: 'Criminology', value: 'College of Criminal and Justice Education' },
+            { label: 'Polytechnic', value: 'College of Polytechnic' },
           ].map(cat => (
             <button
               key={cat.label}
@@ -105,7 +105,7 @@ export default function Home() {
               className={`cat-pill ${collegeFilter === cat.value ? 'active' : ''}`}
               onClick={() => setCollegeFilter(cat.value)}
             >
-              <span>{cat.icon}</span> {cat.label}
+              {cat.label}
             </button>
           ))}
         </div>

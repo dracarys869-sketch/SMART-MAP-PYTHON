@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  getPrograms, createProgram, updateProgram, deleteProgram, uploadProgramImage,
+  getPrograms, updateProgram, deleteProgram, uploadProgramImage,
   getLocations, createLocation, updateLocation, deleteLocation, uploadLocationImage,
-  login, logout,
+  login, logout, mediaUrl,
 } from '../services/api';
 
 const AUTH_KEY = 'isu-auth';
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
     const currentAuth = getAuth();
     try {
       if (currentAuth?.refresh) await logout(currentAuth.refresh);
-    } catch (_) { /* ignore blacklist errors */ }
+    } catch { /* ignore blacklist errors */ }
     localStorage.removeItem(AUTH_KEY);
     setAuth(null);
     navigate('/');
@@ -263,7 +263,7 @@ export default function AdminDashboard() {
   }
 
   // ── Dashboard ─────────────────────────────────────────────────────────────
-  const collegesCount = [...new Set(programs.map(p => p.college))].length;
+  const collegesCount = new Set(programs.map(p => p.college)).size;
 
   return (
     <div className="admin-dash-page">
@@ -277,7 +277,7 @@ export default function AdminDashboard() {
       {/* Top Navigation */}
       <header className="admin-dash-top">
         <div className="admin-dash-brand">
-          <img src="http://127.0.0.1:8000/media/images-programs/isulogo.png" alt="Isabela State University logo" />
+          <img src={mediaUrl('media/images-programs/isulogo.png')} alt="Isabela State University logo" />
           <div className="admin-brand-text">
             <div className="admin-brand-main">ISABELA STATE UNIVERSITY</div>
             <div className="admin-brand-sub">Cauayan campus Admin</div>
@@ -300,21 +300,18 @@ export default function AdminDashboard() {
         {/* Feature #7: Analytics Stat Cards */}
         <div className="admin-stats-grid">
           <div className="stat-card">
-            <span className="stat-icon">🎓</span>
             <div className="stat-info">
               <h3>{programs.length}</h3>
               <p>Academic Programs</p>
             </div>
           </div>
           <div className="stat-card">
-            <span className="stat-icon">🏢</span>
             <div className="stat-info">
               <h3>{locations.length}</h3>
               <p>Campus Buildings & Gates</p>
             </div>
           </div>
           <div className="stat-card">
-            <span className="stat-icon">🏛️</span>
             <div className="stat-info">
               <h3>{collegesCount}</h3>
               <p>Colleges Offered</p>
@@ -567,13 +564,13 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div className="form-group">
-                      <label>📷 Upload / Change Photo</label>
+                       <label>Upload / Change Photo</label>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                         {editingLocation.image_url && (
                           <img src={editingLocation.image_url} alt={editingLocation.name} style={{ width: 60, height: 60, borderRadius: 10, objectFit: 'cover', border: '1px solid #eaecf0' }} />
                         )}
                         <label className="btn-item-edit" style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                          📷 Choose Photo
+                           Choose Photo
                           <input
                             type="file"
                             accept="image/*"
@@ -594,7 +591,7 @@ export default function AdminDashboard() {
                       {l.image_url ? (
                         <img src={l.image_url} alt={l.name} style={{ width: 44, height: 44, borderRadius: 10, objectFit: 'cover', border: '1px solid #eaecf0' }} />
                       ) : (
-                        <div style={{ width: 44, height: 44, borderRadius: 10, background: '#edf7f2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem' }}>🏢</div>
+                         <div style={{ width: 44, height: 44, borderRadius: 10, background: '#edf7f2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem' }}></div>
                       )}
                       <div>
                         <strong>{l.name}</strong>
@@ -602,7 +599,7 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                     <div className="dash-item-actions">
-                      <button className="btn-item-edit" onClick={() => setEditingLocation(l)}>✏️ Edit</button>
+                      <button className="btn-item-edit" onClick={() => setEditingLocation(l)}>Edit</button>
                       <button className="btn-item-delete" onClick={() => handleDeleteLocation(l.id)}>Delete</button>
                     </div>
                   </div>

@@ -1,16 +1,18 @@
 import { Link } from 'react-router-dom';
+import { mediaUrl } from '../services/api';
 
 export default function ProgramCard({ program, onLocate }) {
   const locationName = program.location_details?.name || 'Campus Building';
+  const fallbackImage = mediaUrl('media/images-programs/ict.png');
 
   return (
     <article className="program-card">
       <Link to={`/programs/${program.slug}`} className="program-logo-link" aria-label={`View details for ${program.name}`}>
         <img
           className="program-logo"
-          src={program.image_url || 'http://127.0.0.1:8000/media/images-programs/ict.png'}
+          src={program.image_url || fallbackImage}
           alt={program.name}
-          onError={(e) => { e.target.src = 'http://127.0.0.1:8000/media/images-programs/ict.png'; }}
+          onError={(e) => { e.target.src = fallbackImage; }}
         />
       </Link>
 
@@ -19,11 +21,11 @@ export default function ProgramCard({ program, onLocate }) {
           <h3>{program.name}</h3>
         </Link>
 
-        <p className="program-college">🏛️ {program.college}</p>
-        <p className="program-location">📍 {locationName}</p>
+         <p className="program-college">{program.college}</p>
+         <p className="program-location">{locationName}</p>
 
         <div className="program-chips">
-          <span className="chip">🎓 {program.program_type || 'On-campus'}</span>
+           <span className="chip">{program.program_type || 'On-campus'}</span>
           <span className="chip">⏱️ {program.duration || '4 Years'}</span>
         </div>
 
@@ -39,7 +41,7 @@ export default function ProgramCard({ program, onLocate }) {
               if (onLocate) onLocate(locationName);
             }}
           >
-            📍 Locate
+             Locate
           </button>
         </div>
       </div>

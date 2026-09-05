@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProgram } from '../services/api';
+import { getProgram, mediaUrl } from '../services/api';
 import Navbar from '../components/Navbar';
 import './ProgramDetail.css';
 
@@ -66,8 +66,10 @@ export default function ProgramDetail() {
   /* ── Derived Data ── */
   const locationName = program.location_details?.name || 'Campus Building';
   const routeUrl     = `/?routeTo=${encodeURIComponent(locationName)}`;
-  const campusImageUrl = program.location_details?.image_url || 'http://127.0.0.1:8000/media/images-programs/secondary.jpg';
-  const collegeLogoUrl = program.image_url || 'http://127.0.0.1:8000/media/images-programs/isulogo.png';
+  const campusFallbackImage = mediaUrl('media/images-programs/secondary.jpg');
+  const logoFallbackImage = mediaUrl('media/images-programs/isulogo.png');
+  const campusImageUrl = program.location_details?.image_url || campusFallbackImage;
+  const collegeLogoUrl = program.image_url || logoFallbackImage;
 
   const careerOutcomesList = (program.career_outcomes && program.career_outcomes.length > 0)
     ? program.career_outcomes
@@ -108,7 +110,7 @@ export default function ProgramDetail() {
 
               {/* LEFT — Text */}
               <div className="pd-hero-left">
-                <span className="pd-badge">🎓 Academic Program</span>
+                 <span className="pd-badge">Academic Program</span>
 
                 <h1 className="pd-hero-title">{program.name}</h1>
 
@@ -123,7 +125,7 @@ export default function ProgramDetail() {
 
                 <div className="pd-hero-actions">
                   <Link className="pd-btn-primary" to={routeUrl}>
-                    📍 Locate Building on Map
+                     Locate Building on Map
                   </Link>
                   <a className="pd-btn-secondary" href="#pd-overview">
                     Learn More →
@@ -139,7 +141,7 @@ export default function ProgramDetail() {
                     className="pd-campus-img"
                     src={campusImageUrl}
                     alt={`${program.name} campus building`}
-                    onError={(e) => { e.target.src = 'http://127.0.0.1:8000/media/images-programs/secondary.jpg'; }}
+                    onError={(e) => { e.target.src = campusFallbackImage; }}
                   />
 
                   {/* College Logo — top-left corner overlay */}
@@ -147,13 +149,12 @@ export default function ProgramDetail() {
                     <img
                       src={collegeLogoUrl}
                       alt={`${program.college} logo`}
-                      onError={(e) => { e.target.src = 'http://127.0.0.1:8000/media/images-programs/isulogo.png'; }}
+                      onError={(e) => { e.target.src = logoFallbackImage; }}
                     />
                   </div>
 
                   {/* Campus Location Pill — bottom overlay */}
                   <div className="pd-location-pill">
-                    <div className="pd-location-pill-icon">📍</div>
                     <div>
                       <div className="pd-location-pill-label">Campus Location</div>
                       <div className="pd-location-pill-name">{locationName}</div>
@@ -173,7 +174,6 @@ export default function ProgramDetail() {
         <div className="pd-info-strip-wrap">
           <div className="pd-info-strip">
             <div className="pd-info-item">
-              <div className="pd-info-icon pd-icon-college">🏛️</div>
               <div>
                 <div className="pd-info-label">College / Department</div>
                 <div className="pd-info-value">{program.college}</div>
@@ -189,7 +189,6 @@ export default function ProgramDetail() {
             </div>
 
             <div className="pd-info-item">
-              <div className="pd-info-icon pd-icon-format">🎓</div>
               <div>
                 <div className="pd-info-label">Learning Format</div>
                 <div className="pd-info-value">{program.program_type || program.learning_format || 'On-campus'}</div>
@@ -197,7 +196,6 @@ export default function ProgramDetail() {
             </div>
 
             <div className="pd-info-item">
-              <div className="pd-info-icon pd-icon-building">🏢</div>
               <div>
                 <div className="pd-info-label">Building / Facility</div>
                 <div className="pd-info-value">{locationName}</div>
@@ -217,7 +215,6 @@ export default function ProgramDetail() {
               {/* Program Overview */}
               <div className="pd-card">
                 <div className="pd-card-head">
-                  <div className="pd-card-head-icon">📖</div>
                   <h2>Program Overview</h2>
                 </div>
                 <div className="pd-card-body">
@@ -249,28 +246,24 @@ export default function ProgramDetail() {
                   <div style={{ marginTop: '24px' }}>
                     <div className="pd-features-grid">
                       <div className="pd-feature-item">
-                        <span className="pd-feature-icon">⚡</span>
                         <div>
                           <strong>Hands-on Training</strong>
                           <p>Equipped with state-of-the-art laboratory and practical workshops.</p>
                         </div>
                       </div>
                       <div className="pd-feature-item">
-                        <span className="pd-feature-icon">💼</span>
                         <div>
                           <strong>Industry Internship</strong>
                           <p>Includes On-the-Job (OJT) partnerships with top organizations.</p>
                         </div>
                       </div>
                       <div className="pd-feature-item">
-                        <span className="pd-feature-icon">🔬</span>
                         <div>
                           <strong>Modern Curriculum</strong>
                           <p>Continuously updated to match local and international standards.</p>
                         </div>
                       </div>
                       <div className="pd-feature-item">
-                        <span className="pd-feature-icon">🏆</span>
                         <div>
                           <strong>Expert Mentorship</strong>
                           <p>Guided by licensed faculty and experienced industry practitioners.</p>
@@ -287,7 +280,6 @@ export default function ProgramDetail() {
               {/* Location Card */}
               <div className="pd-card">
                 <div className="pd-card-head">
-                  <div className="pd-card-head-icon">📍</div>
                   <h2>Location & Campus Building</h2>
                 </div>
                 <div className="pd-card-body">
@@ -301,7 +293,7 @@ export default function ProgramDetail() {
                     )}
                   </div>
                   <Link className="pd-btn-primary pd-btn-full" to={routeUrl}>
-                    🗺️ View Route on Campus Map
+                     View Route on Campus Map
                   </Link>
                 </div>
               </div>
@@ -309,7 +301,6 @@ export default function ProgramDetail() {
               {/* Admission Requirements */}
               <div className="pd-card">
                 <div className="pd-card-head">
-                  <div className="pd-card-head-icon">📋</div>
                   <h2>General Requirements</h2>
                 </div>
                 <div className="pd-card-body">
@@ -340,7 +331,6 @@ export default function ProgramDetail() {
           {/* ── Full Width Career Outcomes & Pathways Card ── */}
           <div className="pd-card" style={{ marginTop: '28px' }}>
             <div className="pd-card-head">
-              <div className="pd-card-head-icon">🚀</div>
               <h2>Career Outcomes & Pathways</h2>
             </div>
             <div className="pd-card-body">
@@ -350,7 +340,6 @@ export default function ProgramDetail() {
               <div className="pd-chips-wrap">
                 {careerOutcomesList.map((outcome, idx) => (
                   <div key={idx} className="pd-chip">
-                    <span className="pd-chip-check">✓</span>
                     <span>{outcome}</span>
                   </div>
                 ))}
@@ -368,10 +357,10 @@ export default function ProgramDetail() {
             </div>
             <div className="pd-cta-actions">
               <Link className="pd-btn-cta-white" to={routeUrl}>
-                📍 Open Interactive Map
+                Open Interactive Map
               </Link>
               <Link className="pd-btn-cta-ghost" to="/">
-                🎓 Browse All Programs
+                Browse All Programs
               </Link>
             </div>
           </div>

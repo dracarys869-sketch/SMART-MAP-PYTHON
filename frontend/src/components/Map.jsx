@@ -18,6 +18,7 @@ const Map = forwardRef(({ locations }, ref) => {
   const userMarkerRef = useRef(null);
   const selectedPinpointRef = useRef(null);
   const lastDestinationRef = useRef(null);
+  const locationMarkersRef = useRef([]);
 
   const campusCenter = [121.7645, 16.9385];
 
@@ -88,17 +89,23 @@ const Map = forwardRef(({ locations }, ref) => {
     const addMarkers = () => {
       const bounds = new maplibregl.LngLatBounds();
 
+      locationMarkersRef.current.forEach(marker => marker.remove());
+      locationMarkersRef.current = [];
+
       locations.forEach(loc => {
         const el = document.createElement('div');
         el.className = 'custom-map-pin-container';
-        el.innerHTML = `
-          <div class="custom-pin-drop"></div>
-          <div class="custom-pin-label">${loc.name}</div>
-        `;
+        const pinDrop = document.createElement('div');
+        pinDrop.className = 'custom-pin-drop';
+        const pinLabel = document.createElement('div');
+        pinLabel.className = 'custom-pin-label';
+        pinLabel.textContent = loc.name;
+        el.append(pinDrop, pinLabel);
 
         const marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
           .setLngLat([parseFloat(loc.longitude), parseFloat(loc.latitude)])
           .addTo(map);
+        locationMarkersRef.current.push(marker);
 
         el.style.cursor = 'pointer';
         el.addEventListener("click", (e) => {
@@ -120,6 +127,11 @@ const Map = forwardRef(({ locations }, ref) => {
     } else {
       map.once('load', addMarkers);
     }
+
+    return () => {
+      locationMarkersRef.current.forEach(marker => marker.remove());
+      locationMarkersRef.current = [];
+    };
   }, [locations]);
 
   const drawRouteLine = (geojson) => {
@@ -410,7 +422,7 @@ const Map = forwardRef(({ locations }, ref) => {
     const mode = e.target.value;
     setRouteStartMode(mode);
     if (mode === "user" && !userLocation) {
-      requestUserLocation((loc) => {
+      requestUserLocation(() => {
         if (lastDestinationRef.current) {
           showRouteFromSelectedStart(lastDestinationRef.current.lat, lastDestinationRef.current.lng, lastDestinationRef.current.name);
         }
@@ -438,7 +450,7 @@ const Map = forwardRef(({ locations }, ref) => {
           <input
             type="text"
             className="map-live-search-input"
-            placeholder="🔍 Type building or landmark name..."
+             placeholder="Type building or landmark name..."
             value={mapSearch}
             onChange={e => setMapSearch(e.target.value)}
           />
@@ -474,12 +486,12 @@ const Map = forwardRef(({ locations }, ref) => {
             
             {/* Feature #1: 3D View Toggle */}
             <button type="button" className="btn-pill-gray" onClick={toggle3DView}>
-              {is3D ? '🏙️ 3D View' : '🗺️ 2D Flat'}
+               {is3D ? '3D View' : '2D Flat'}
             </button>
 
             {/* Feature #4: Guided Tour */}
             <button type="button" className={isTourRunning ? 'btn-pill-red' : 'btn-pill-green'} onClick={runGuidedTour}>
-              {isTourRunning ? '⏹️ Stop Tour' : '🚩 Campus Tour'}
+               {isTourRunning ? 'Stop Tour' : 'Campus Tour'}
             </button>
           </div>
 
@@ -497,11 +509,11 @@ const Map = forwardRef(({ locations }, ref) => {
           {selectedLocationDrawer && (
             <div className="map-drawer-overlay">
               <div className="map-drawer-card">
-                <button className="map-drawer-close" onClick={() => setSelectedLocationDrawer(null)}>✕</button>
+                 <button className="map-drawer-close" onClick={() => setSelectedLocationDrawer(null)}>Close</button>
                 {selectedLocationDrawer.image_url ? (
                   <img className="map-drawer-img" src={selectedLocationDrawer.image_url} alt={selectedLocationDrawer.name} />
                 ) : (
-                  <div className="map-drawer-img-ph">🏢 {selectedLocationDrawer.type}</div>
+                  <div className="map-drawer-img-ph">{selectedLocationDrawer.type}</div>
                 )}
                 <h3>{selectedLocationDrawer.name}</h3>
                 <span className="map-drawer-badge">{selectedLocationDrawer.type}</span>
@@ -509,14 +521,14 @@ const Map = forwardRef(({ locations }, ref) => {
                   {selectedLocationDrawer.description || 'Key building facility at ISU Cauayan Campus.'}
                 </p>
                 <div className="map-drawer-meta">
-                  <p>📍 Coordinates: {selectedLocationDrawer.latitude}, {selectedLocationDrawer.longitude}</p>
+                  <p>Coordinates: {selectedLocationDrawer.latitude}, {selectedLocationDrawer.longitude}</p>
                 </div>
                 <button
                   className="btn-gold"
                   style={{ width: '100%', marginTop: 12, padding: '10px' }}
                   onClick={() => showRouteFromSelectedStart(parseFloat(selectedLocationDrawer.latitude), parseFloat(selectedLocationDrawer.longitude), selectedLocationDrawer.name)}
                 >
-                  📍 Route Here
+                  Route Here
                 </button>
               </div>
             </div>
